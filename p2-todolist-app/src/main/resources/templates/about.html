@@ -1,15 +1,19 @@
 <!DOCTYPE html>
-<html>
-<head>
-    <meta charset="UTF-8">
-    <title>About</title>
-</head>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments :: head (titulo='About')"></head>
 <body>
-<h1>ToDoList</h1>
-<ul>
-    <li>Developed by James Brown</li>
-    <li>Version 1.0.1 (snapshot)</li>
-    <li>Release date: pending</li>
-</ul>
+
+<div th:replace="fragments :: menu"></div>
+
+<div class="container mt-4">
+    <h1>ToDoList</h1>
+    <ul>
+        <li>Developed by James Brown</li>
+        <li>Version 1.0.1 (snapshot)</li>
+        <li>Release date: pending</li>
+    </ul>
+</div>
+
+<div th:replace="fragments :: javascript"></div>
 </body>
 </html>
