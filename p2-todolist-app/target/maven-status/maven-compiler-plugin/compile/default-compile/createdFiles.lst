@@ -3,6 +3,7 @@ todolist\model\Usuario.class
 todolist\authentication\ManagerUserSession.class
 todolist\dto\LoginData.class
 todolist\service\UsuarioService.class
+todolist\controller\AboutController.class
 todolist\service\UsuarioService$LoginStatus.class
 todolist\service\UsuarioServiceException.class
 todolist\config\ModelMapperConfig.class
