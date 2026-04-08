@@ -74,6 +74,7 @@ public class UsuarioService {
             return modelMapper.map(usuario, UsuarioData.class);
         }
     }
+
     @Transactional(readOnly = true)
     public List<UsuarioData> findAllUsuarios() {
         Iterable<Usuario> usuarios = usuarioRepository.findAll();
