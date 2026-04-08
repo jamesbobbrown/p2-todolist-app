@@ -11,6 +11,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import static org.hamcrest.Matchers.containsString;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -31,6 +32,7 @@ public class UsuarioWebTest {
     // las peticiones a los endpoint.
     @MockBean
     private UsuarioService usuarioService;
+
 
     @Test
     public void servicioLoginUsuarioOK() throws Exception {
@@ -92,5 +94,20 @@ public class UsuarioWebTest {
                         .param("eMail","ana.garcia@gmail.com")
                         .param("password","000"))
                 .andExpect(content().string(containsString("Contraseña incorrecta")));
+    }
+    @Test
+    public void registeredUserDescriptionPageShowsUserData() throws Exception {
+        UsuarioData usuario = new UsuarioData();
+        usuario.setId(1L);
+        usuario.setNombre("Richard Stallman");
+        usuario.setEmail("richard@umh.es");
+
+        when(usuarioService.findUsuarioDescripcionById(1L)).thenReturn(usuario);
+
+        this.mockMvc.perform(get("/registered/1"))
+                .andExpect(status().isOk())
+                .andExpect(content().string(containsString("User description")))
+                .andExpect(content().string(containsString("Richard Stallman")))
+                .andExpect(content().string(containsString("richard@umh.es")));
     }
 }

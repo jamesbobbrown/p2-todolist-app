@@ -88,7 +88,21 @@ public class UsuarioServiceTest {
             usuarioService.registrar(usuario);
         });
     }
+    @Test
+    public void testFindUsuarioDescripcionById() {
+        UsuarioData usuario = new UsuarioData();
+        usuario.setEmail("richard@umh.es");
+        usuario.setPassword("1234");
+        usuario.setNombre("Richard Stallman");
 
+        UsuarioData usuarioRegistrado = usuarioService.registrar(usuario);
+
+        UsuarioData usuarioBD = usuarioService.findUsuarioDescripcionById(usuarioRegistrado.getId());
+
+        assertThat(usuarioBD).isNotNull();
+        assertThat(usuarioBD.getEmail()).isEqualTo("richard@umh.es");
+        assertThat(usuarioBD.getNombre()).isEqualTo("Richard Stallman");
+    }
 
     @Test
     public void servicioRegistroUsuarioExcepcionConEmailRepetido() {
