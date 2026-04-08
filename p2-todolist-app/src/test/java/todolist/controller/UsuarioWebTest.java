@@ -100,6 +100,20 @@ public class UsuarioWebTest {
                 .andExpect(content().string(containsString("Contraseña incorrecta")));
     }
     @Test
+    public void registeredUserDescriptionPageShowsUserData() throws Exception {
+        UsuarioData usuario = new UsuarioData();
+        usuario.setId(1L);
+        usuario.setNombre("Richard Stallman");
+        usuario.setEmail("richard@umh.es");
+
+        when(usuarioService.findUsuarioDescripcionById(1L)).thenReturn(usuario);
+
+        this.mockMvc.perform(get("/registered/1"))
+                .andExpect(status().isOk())
+                .andExpect(content().string(containsString("User description")))
+                .andExpect(content().string(containsString("Richard Stallman")))
+                .andExpect(content().string(containsString("richard@umh.es")));
+    }
     public void registeredUsersPageShowsUserEmail() throws Exception {
         UsuarioData usuario = new UsuarioData();
         usuario.setId(1L);

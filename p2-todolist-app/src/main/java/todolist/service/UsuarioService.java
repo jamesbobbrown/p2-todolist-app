@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -84,4 +85,11 @@ public class UsuarioService {
         res.sort((u1, u2) -> u1.getId().compareTo(u2.getId()));
         return res;
     }
+    @Transactional(readOnly = true)
+    public UsuarioData findUsuarioDescripcionById(Long usuarioId) {
+        Usuario usuario = usuarioRepository.findById(usuarioId).orElse(null);
+        if (usuario == null) return null;
+        return modelMapper.map(usuario, UsuarioData.class);
+    }
+
 }
