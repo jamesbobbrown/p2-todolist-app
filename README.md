@@ -41,7 +41,11 @@ The page shows the identifier and email of all registered users and provides a l
 This feature also includes a service-layer test and a controller/web test.
 
 ### 4. User Description Page
-Pending implementation.
+The User Description Page was implemented in version `1.1.0-SNAPSHOT`.  
+A new endpoint `GET /registered/{id}` was added to display the description of one registered user.  
+A service method was added to retrieve the selected user as a `UsuarioData` DTO, and a new Thymeleaf template `descripcionUsuario.html` was created to show the user data.  
+The page displays the user identifier, name, email and date of birth, but it does not display the password, following the statement requirements.  
+This feature also includes a service test and a controller/web test.
 
 ## Main Endpoints
 
@@ -59,10 +63,10 @@ Pending implementation.
 - `POST /tareas/{id}/editar`
 - `DELETE /tareas/{id}`
 - `GET /registered`
+-  `GET /registered/{id}`
 
 ### New endpoints planned for version 1.1.0
 
-- `GET /registered/{id}`
 
 ## Tests
 
