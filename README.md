@@ -61,15 +61,12 @@ The endpoints `GET /registered` and `GET /registered/{id}` now verify the logged
 If a non-admin user or an anonymous user tries to access these pages, the application returns HTTP `401 Unauthorized` with a message indicating insufficient permissions.  
 This feature extends the administrator functionality and includes controller/web tests for both authorized and unauthorized access cases.
 
-## Optional Features
-
-The project also includes optional improvements on top of the required features.  
-These are being implemented after finishing the required version `1.1.0-SNAPSHOT` workflow.
-
-Planned optional features:
-- Administrator user
-- Protection of users list and user description pages
-- Enable/disable user access by administrator
+### 7. User Blocking by Administrator
+A final optional feature was added so the administrator can disable or enable user access from the registered users page.  
+The users list page now includes a button to disable or enable each user.  
+A new boolean field was added to the user model and DTO to store whether the user is blocked.  
+If a blocked user tries to log in, the service layer returns a blocked-user status and the login page shows the error message `Usuario bloqueado`.  
+This feature required updates in the model, DTOs, service layer, controller endpoints, users list template, and automated tests.
 
 
 ## Main Endpoints
