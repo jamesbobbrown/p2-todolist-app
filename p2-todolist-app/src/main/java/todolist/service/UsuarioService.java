@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -50,6 +52,14 @@ public class UsuarioService {
             throw new UsuarioServiceException("El usuario no tiene password");
         else {
             Usuario usuarioNuevo = modelMapper.map(usuario, Usuario.class);
+
+            if (usuario.isAdmin()) {
+                if (existeAdministrador()) {
+                    throw new UsuarioServiceException("Ya existe un usuario administrador");
+                }
+                usuarioNuevo.setAdmin(true);
+            }
+
             usuarioNuevo = usuarioRepository.save(usuarioNuevo);
             return modelMapper.map(usuarioNuevo, UsuarioData.class);
         }
@@ -71,5 +81,37 @@ public class UsuarioService {
         else {
             return modelMapper.map(usuario, UsuarioData.class);
         }
+    }
+    @Transactional(readOnly = true)
+    public boolean existeAdministrador() {
+        Iterable<Usuario> usuarios = usuarioRepository.findAll();
+        for (Usuario usuario : usuarios) {
+            if (usuario.isAdmin()) {
+                return true;
+            }
+        }
+        return false;
+    }
+    @Transactional(readOnly = true)
+    public boolean esAdministrador(Long usuarioId) {
+        Usuario usuario = usuarioRepository.findById(usuarioId).orElse(null);
+        return usuario != null && usuario.isAdmin();
+    }
+    @Transactional(readOnly = true)
+    public List<UsuarioData> findAllUsuarios() {
+        Iterable<Usuario> usuarios = usuarioRepository.findAll();
+        List<UsuarioData> res = new ArrayList<>();
+        for (Usuario usuario : usuarios) {
+            res.add(modelMapper.map(usuario, UsuarioData.class));
+        }
+        res.sort((u1, u2) -> u1.getId().compareTo(u2.getId()));
+        return res;
+    }
+
+    @Transactional(readOnly = true)
+    public UsuarioData findUsuarioDescripcionById(Long usuarioId) {
+        Usuario usuario = usuarioRepository.findById(usuarioId).orElse(null);
+        if (usuario == null) return null;
+        return modelMapper.map(usuario, UsuarioData.class);
     }
 }
