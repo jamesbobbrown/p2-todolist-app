@@ -16,6 +16,9 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @SpringBootTest
 @AutoConfigureMockMvc
 //
@@ -33,6 +36,8 @@ public class UsuarioWebTest {
     // las peticiones a los endpoint.
     @MockBean
     private UsuarioService usuarioService;
+
+
 
     @Test
     public void servicioLoginUsuarioOK() throws Exception {
@@ -131,4 +136,36 @@ public class UsuarioWebTest {
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/registered"));
     }
+    public void registeredUserDescriptionPageShowsUserData() throws Exception {
+        UsuarioData usuario = new UsuarioData();
+        usuario.setId(1L);
+        usuario.setNombre("Richard Stallman");
+        usuario.setEmail("richard@umh.es");
+
+        when(usuarioService.findUsuarioDescripcionById(1L)).thenReturn(usuario);
+
+        this.mockMvc.perform(get("/registered/1"))
+                .andExpect(status().isOk())
+                .andExpect(content().string(containsString("User description")))
+                .andExpect(content().string(containsString("Richard Stallman")))
+                .andExpect(content().string(containsString("richard@umh.es")));
+    }
+    public void registeredUsersPageShowsUserEmail() throws Exception {
+        UsuarioData usuario = new UsuarioData();
+        usuario.setId(1L);
+        usuario.setEmail("richard@umh.es");
+
+        List<UsuarioData> usuarios = new ArrayList<>();
+        usuarios.add(usuario);
+
+        when(usuarioService.findAllUsuarios()).thenReturn(usuarios);
+
+        this.mockMvc.perform(get("/registered"))
+                .andExpect(status().isOk())
+                .andExpect(content().string(containsString("Registered users")))
+                .andExpect(content().string(containsString("richard@umh.es")));
+    }
+
+
+
 }

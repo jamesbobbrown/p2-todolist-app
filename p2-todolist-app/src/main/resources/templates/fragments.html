@@ -21,6 +21,9 @@
             <li class="nav-item">
                 <a class="nav-link" th:href="@{/usuarios/{id}/tareas(id=${usuario.id})}">Tasks</a>
             </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/registered">Users</a>
+            </li>
         </ul>
 
         <ul class="navbar-nav mr-auto" th:if="${usuario == null}">
@@ -29,6 +32,9 @@
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="/registro">Registration</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/registered">Users</a>
             </li>
         </ul>
 
