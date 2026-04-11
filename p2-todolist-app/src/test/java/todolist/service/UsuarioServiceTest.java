@@ -224,4 +224,42 @@ public class UsuarioServiceTest {
         assertThat(usuario.getEmail()).isEqualTo("richard@umh.es");
         assertThat(usuario.getNombre()).isEqualTo("Richard Stallman");
     }
+    @Test
+    public void testBloquearUsuario() {
+        UsuarioData usuario = new UsuarioData();
+        usuario.setEmail("user@umh.es");
+        usuario.setPassword("1234");
+
+        UsuarioData usuarioRegistrado = usuarioService.registrar(usuario);
+
+        usuarioService.bloquearUsuario(usuarioRegistrado.getId());
+
+        assertThat(usuarioService.usuarioBloqueado(usuarioRegistrado.getId())).isTrue();
+    }
+    @Test
+    public void testDesbloquearUsuario() {
+        UsuarioData usuario = new UsuarioData();
+        usuario.setEmail("user@umh.es");
+        usuario.setPassword("1234");
+
+        UsuarioData usuarioRegistrado = usuarioService.registrar(usuario);
+
+        usuarioService.bloquearUsuario(usuarioRegistrado.getId());
+        usuarioService.desbloquearUsuario(usuarioRegistrado.getId());
+
+        assertThat(usuarioService.usuarioBloqueado(usuarioRegistrado.getId())).isFalse();
+    }
+    @Test
+    public void testLoginUsuarioBloqueado() {
+        UsuarioData usuario = new UsuarioData();
+        usuario.setEmail("blocked@umh.es");
+        usuario.setPassword("1234");
+
+        UsuarioData usuarioRegistrado = usuarioService.registrar(usuario);
+        usuarioService.bloquearUsuario(usuarioRegistrado.getId());
+
+        UsuarioService.LoginStatus status = usuarioService.login("blocked@umh.es", "1234");
+
+        assertThat(status).isEqualTo(UsuarioService.LoginStatus.USER_BLOCKED);
+    }
 }

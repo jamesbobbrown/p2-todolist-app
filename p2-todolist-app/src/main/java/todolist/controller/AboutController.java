@@ -10,6 +10,9 @@ import org.springframework.web.server.ResponseStatusException;
 import todolist.authentication.ManagerUserSession;
 import todolist.dto.UsuarioData;
 import todolist.service.UsuarioService;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.server.ResponseStatusException;
 
 @Controller
 public class AboutController {
@@ -45,5 +48,34 @@ public class AboutController {
         UsuarioData usuario = usuarioService.findUsuarioDescripcionById(id);
         model.addAttribute("usuario", usuario);
         return "descripcionUsuario";
+    }
+    @PostMapping("/registered/{id}/bloquear")
+    public String bloquearUsuario(@PathVariable Long id) {
+        Long idUsuarioLogeado = managerUserSession.usuarioLogeado();
+
+        if (idUsuarioLogeado == null || !usuarioService.esAdministrador(idUsuarioLogeado)) {
+            throw new ResponseStatusException(
+                    HttpStatus.UNAUTHORIZED,
+                    "No tienes permisos suficientes para acceder a esta página"
+            );
+        }
+
+        usuarioService.bloquearUsuario(id);
+        return "redirect:/registered";
+    }
+
+    @PostMapping("/registered/{id}/desbloquear")
+    public String desbloquearUsuario(@PathVariable Long id) {
+        Long idUsuarioLogeado = managerUserSession.usuarioLogeado();
+
+        if (idUsuarioLogeado == null || !usuarioService.esAdministrador(idUsuarioLogeado)) {
+            throw new ResponseStatusException(
+                    HttpStatus.UNAUTHORIZED,
+                    "No tienes permisos suficientes para acceder a esta página"
+            );
+        }
+
+        usuarioService.desbloquearUsuario(id);
+        return "redirect:/registered";
     }
 }

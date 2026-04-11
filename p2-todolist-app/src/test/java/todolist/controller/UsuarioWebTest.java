@@ -195,4 +195,33 @@ public class UsuarioWebTest {
                 .andExpect(content().string(containsString("User description")))
                 .andExpect(content().string(containsString("Richard Stallman")));
     }
+    @Test
+    public void blockedUserCannotLogin() throws Exception {
+        when(usuarioService.login("blocked@umh.es", "1234"))
+                .thenReturn(UsuarioService.LoginStatus.USER_BLOCKED);
+
+        this.mockMvc.perform(post("/login")
+                        .param("eMail", "blocked@umh.es")
+                        .param("password", "1234"))
+                .andExpect(status().isOk())
+                .andExpect(content().string(containsString("Usuario bloqueado")));
+    }
+    @Test
+    public void adminCanBlockUser() throws Exception {
+        when(managerUserSession.usuarioLogeado()).thenReturn(1L);
+        when(usuarioService.esAdministrador(1L)).thenReturn(true);
+
+        this.mockMvc.perform(post("/registered/2/bloquear"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/registered"));
+    }
+    @Test
+    public void adminCanUnblockUser() throws Exception {
+        when(managerUserSession.usuarioLogeado()).thenReturn(1L);
+        when(usuarioService.esAdministrador(1L)).thenReturn(true);
+
+        this.mockMvc.perform(post("/registered/2/desbloquear"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/registered"));
+    }
 }
