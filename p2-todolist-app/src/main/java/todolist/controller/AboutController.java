@@ -42,15 +42,6 @@ public class AboutController {
 
     @GetMapping("/registered/{id}")
     public String registeredUserDescription(@PathVariable Long id, Model model) {
-        Long idUsuarioLogeado = managerUserSession.usuarioLogeado();
-
-        if (idUsuarioLogeado == null || !usuarioService.esAdministrador(idUsuarioLogeado)) {
-            throw new ResponseStatusException(
-                    HttpStatus.UNAUTHORIZED,
-                    "No tienes permisos suficientes para acceder a esta página"
-            );
-        }
-
         UsuarioData usuario = usuarioService.findUsuarioDescripcionById(id);
         model.addAttribute("usuario", usuario);
         return "descripcionUsuario";

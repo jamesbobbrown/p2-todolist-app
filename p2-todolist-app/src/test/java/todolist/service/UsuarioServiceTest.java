@@ -8,7 +8,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.jdbc.Sql;
 
 import static org.assertj.core.api.Assertions.assertThat;
-
+import java.util.List;
+import static org.assertj.core.api.Assertions.assertThat;
 @SpringBootTest
 @Sql(scripts = "/clean-db.sql")
 public class UsuarioServiceTest {
@@ -25,6 +26,24 @@ public class UsuarioServiceTest {
         usuario.setPassword("1234");
         UsuarioData nuevoUsuario = usuarioService.registrar(usuario);
         return nuevoUsuario.getId();
+    }
+    @Test
+    public void testFindAllUsuarios() {
+        UsuarioData usuario1 = new UsuarioData();
+        usuario1.setEmail("richard@umh.es");
+        usuario1.setPassword("1234");
+        usuarioService.registrar(usuario1);
+
+        UsuarioData usuario2 = new UsuarioData();
+        usuario2.setEmail("james@umh.es");
+        usuario2.setPassword("1234");
+        usuarioService.registrar(usuario2);
+
+        List<UsuarioData> usuarios = usuarioService.findAllUsuarios();
+
+        assertThat(usuarios).hasSize(2);
+        assertThat(usuarios.get(0).getEmail()).isEqualTo("richard@umh.es");
+        assertThat(usuarios.get(1).getEmail()).isEqualTo("james@umh.es");
     }
 
     @Test
@@ -127,6 +146,19 @@ public class UsuarioServiceTest {
         Assertions.assertThrows(UsuarioServiceException.class, () -> {
             usuarioService.registrar(admin2);
         });
+    public void testFindUsuarioDescripcionById() {
+        UsuarioData usuario = new UsuarioData();
+        usuario.setEmail("richard@umh.es");
+        usuario.setPassword("1234");
+        usuario.setNombre("Richard Stallman");
+
+        UsuarioData usuarioRegistrado = usuarioService.registrar(usuario);
+
+        UsuarioData usuarioBD = usuarioService.findUsuarioDescripcionById(usuarioRegistrado.getId());
+
+        assertThat(usuarioBD).isNotNull();
+        assertThat(usuarioBD.getEmail()).isEqualTo("richard@umh.es");
+        assertThat(usuarioBD.getNombre()).isEqualTo("Richard Stallman");
     }
 
     @Test

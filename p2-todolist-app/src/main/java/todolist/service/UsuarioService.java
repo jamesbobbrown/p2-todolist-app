@@ -97,6 +97,7 @@ public class UsuarioService {
         Usuario usuario = usuarioRepository.findById(usuarioId).orElse(null);
         return usuario != null && usuario.isAdmin();
     }
+
     @Transactional(readOnly = true)
     public List<UsuarioData> findAllUsuarios() {
         Iterable<Usuario> usuarios = usuarioRepository.findAll();
