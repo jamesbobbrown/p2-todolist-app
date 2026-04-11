@@ -47,6 +47,17 @@ A service method was added to retrieve the selected user as a `UsuarioData` DTO,
 The page displays the user identifier, name, email and date of birth, but it does not display the password, following the statement requirements.  
 This feature also includes a service test and a controller/web test.
 
+## Optional Features
+
+The project also includes optional improvements on top of the required features.  
+These are being implemented after finishing the required version `1.1.0-SNAPSHOT` workflow.
+
+Planned optional features:
+- Administrator user
+- Protection of users list and user description pages
+- Enable/disable user access by administrator
+
+
 ## Main Endpoints
 
 ### Existing endpoints
