@@ -188,7 +188,8 @@ public class UsuarioWebTest {
         this.mockMvc.perform(get("/registered/1"))
                 .andExpect(status().isOk())
                 .andExpect(content().string(containsString("User description")))
-                .andExpect(content().string(containsString("Richard Stallman")));
+                .andExpect(content().string(containsString("Richard Stallman")))
+                .andExpect(content().string(containsString("richard@umh.es")));
     }
     @Test
     public void blockedUserCannotLogin() throws Exception {
