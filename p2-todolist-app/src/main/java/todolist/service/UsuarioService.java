@@ -115,5 +115,9 @@ public class UsuarioService {
         if (usuario == null) return null;
         return modelMapper.map(usuario, UsuarioData.class);
     }
-
+    @Transactional(readOnly = true)
+    public boolean usuarioEsAdministradorPorEmail(String email) {
+        Usuario usuario = usuarioRepository.findByEmail(email).orElse(null);
+        return usuario != null && usuario.isAdmin();
+    }
 }

@@ -8,7 +8,12 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
+import todolist.authentication.ManagerUserSession;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.mockito.Mockito.when;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.core.IsNot.not;
 import static org.mockito.Mockito.when;
@@ -136,21 +141,28 @@ public class UsuarioWebTest {
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/registered"));
     }
-    public void registeredUserDescriptionPageShowsUserData() throws Exception {
-        UsuarioData usuario = new UsuarioData();
-        usuario.setId(1L);
-        usuario.setNombre("Richard Stallman");
-        usuario.setEmail("richard@umh.es");
+    @MockBean
+    private ManagerUserSession managerUserSession;
+    @Test
+    public void registeredUsersPageUnauthorizedForNonAdmin() throws Exception {
+        when(managerUserSession.usuarioLogeado()).thenReturn(2L);
+        when(usuarioService.esAdministrador(2L)).thenReturn(false);
 
-        when(usuarioService.findUsuarioDescripcionById(1L)).thenReturn(usuario);
+        this.mockMvc.perform(get("/registered"))
+                .andExpect(status().isUnauthorized())
+                .andExpect(status().reason(containsString("No tienes permisos suficientes")));
+    }
+    @Test
+    public void registeredUserDescriptionUnauthorizedForNonAdmin() throws Exception {
+        when(managerUserSession.usuarioLogeado()).thenReturn(2L);
+        when(usuarioService.esAdministrador(2L)).thenReturn(false);
 
         this.mockMvc.perform(get("/registered/1"))
-                .andExpect(status().isOk())
-                .andExpect(content().string(containsString("User description")))
-                .andExpect(content().string(containsString("Richard Stallman")))
-                .andExpect(content().string(containsString("richard@umh.es")));
+                .andExpect(status().isUnauthorized())
+                .andExpect(status().reason(containsString("No tienes permisos suficientes")));
     }
-    public void registeredUsersPageShowsUserEmail() throws Exception {
+    @Test
+    public void registeredUsersPageWorksForAdmin() throws Exception {
         UsuarioData usuario = new UsuarioData();
         usuario.setId(1L);
         usuario.setEmail("richard@umh.es");
@@ -158,6 +170,8 @@ public class UsuarioWebTest {
         List<UsuarioData> usuarios = new ArrayList<>();
         usuarios.add(usuario);
 
+        when(managerUserSession.usuarioLogeado()).thenReturn(1L);
+        when(usuarioService.esAdministrador(1L)).thenReturn(true);
         when(usuarioService.findAllUsuarios()).thenReturn(usuarios);
 
         this.mockMvc.perform(get("/registered"))
@@ -165,7 +179,20 @@ public class UsuarioWebTest {
                 .andExpect(content().string(containsString("Registered users")))
                 .andExpect(content().string(containsString("richard@umh.es")));
     }
+    @Test
+    public void registeredUserDescriptionWorksForAdmin() throws Exception {
+        UsuarioData usuario = new UsuarioData();
+        usuario.setId(1L);
+        usuario.setNombre("Richard Stallman");
+        usuario.setEmail("richard@umh.es");
 
+        when(managerUserSession.usuarioLogeado()).thenReturn(1L);
+        when(usuarioService.esAdministrador(1L)).thenReturn(true);
+        when(usuarioService.findUsuarioDescripcionById(1L)).thenReturn(usuario);
 
-
+        this.mockMvc.perform(get("/registered/1"))
+                .andExpect(status().isOk())
+                .andExpect(content().string(containsString("User description")))
+                .andExpect(content().string(containsString("Richard Stallman")));
+    }
 }
