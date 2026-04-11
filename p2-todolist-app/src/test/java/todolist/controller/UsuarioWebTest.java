@@ -10,6 +10,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.core.IsNot.not;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -100,6 +101,41 @@ public class UsuarioWebTest {
                 .andExpect(content().string(containsString("Contraseña incorrecta")));
     }
     @Test
+    public void registroPageShowsAdminCheckboxWhenNoAdminExists() throws Exception {
+        when(usuarioService.existeAdministrador()).thenReturn(false);
+
+        this.mockMvc.perform(get("/registro"))
+                .andExpect(status().isOk())
+                .andExpect(content().string(containsString("Register as administrator")));
+    }
+    @Test
+    public void registroPageHidesAdminCheckboxWhenAdminExists() throws Exception {
+        when(usuarioService.existeAdministrador()).thenReturn(true);
+
+        this.mockMvc.perform(get("/registro"))
+                .andExpect(status().isOk())
+                .andExpect(content().string(not(containsString("Register as administrator"))));
+    }
+    @Test
+    public void adminLoginRedirectsToRegisteredUsersList() throws Exception {
+        UsuarioData admin = new UsuarioData();
+        admin.setNombre("Admin User");
+        admin.setId(1L);
+        admin.setAdmin(true);
+
+        when(usuarioService.login("admin@umh.es", "1234"))
+                .thenReturn(UsuarioService.LoginStatus.LOGIN_OK);
+        when(usuarioService.findByEmail("admin@umh.es"))
+                .thenReturn(admin);
+        when(usuarioService.esAdministrador(1L))
+                .thenReturn(true);
+
+        this.mockMvc.perform(post("/login")
+                        .param("eMail", "admin@umh.es")
+                        .param("password", "1234"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/registered"));
+    }
     public void registeredUserDescriptionPageShowsUserData() throws Exception {
         UsuarioData usuario = new UsuarioData();
         usuario.setId(1L);

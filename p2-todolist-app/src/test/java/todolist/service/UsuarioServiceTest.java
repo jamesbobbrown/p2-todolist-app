@@ -108,6 +108,44 @@ public class UsuarioServiceTest {
         });
     }
     @Test
+    public void testExisteAdministrador() {
+        assertThat(usuarioService.existeAdministrador()).isFalse();
+
+        UsuarioData admin = new UsuarioData();
+        admin.setEmail("admin@umh.es");
+        admin.setPassword("1234");
+        admin.setAdmin(true);
+        usuarioService.registrar(admin);
+
+        assertThat(usuarioService.existeAdministrador()).isTrue();
+    }
+    @Test
+    public void testEsAdministrador() {
+        UsuarioData admin = new UsuarioData();
+        admin.setEmail("admin@umh.es");
+        admin.setPassword("1234");
+        admin.setAdmin(true);
+
+        UsuarioData adminRegistrado = usuarioService.registrar(admin);
+
+        assertThat(usuarioService.esAdministrador(adminRegistrado.getId())).isTrue();
+    }
+    @Test
+    public void testNoSePuedeRegistrarMasDeUnAdministrador() {
+        UsuarioData admin1 = new UsuarioData();
+        admin1.setEmail("admin1@umh.es");
+        admin1.setPassword("1234");
+        admin1.setAdmin(true);
+        usuarioService.registrar(admin1);
+
+        UsuarioData admin2 = new UsuarioData();
+        admin2.setEmail("admin2@umh.es");
+        admin2.setPassword("1234");
+        admin2.setAdmin(true);
+
+        Assertions.assertThrows(UsuarioServiceException.class, () -> {
+            usuarioService.registrar(admin2);
+        });
     public void testFindUsuarioDescripcionById() {
         UsuarioData usuario = new UsuarioData();
         usuario.setEmail("richard@umh.es");

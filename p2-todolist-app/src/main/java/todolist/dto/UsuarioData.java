@@ -11,9 +11,16 @@ public class UsuarioData {
     private String nombre;
     private String password;
     private Date fechaNacimiento;
+    private boolean admin;
 
     // Getters y setters
+    public boolean isAdmin() {
+        return admin;
+    }
 
+    public void setAdmin(boolean admin) {
+        this.admin = admin;
+    }
     public Long getId() {
         return id;
     }
