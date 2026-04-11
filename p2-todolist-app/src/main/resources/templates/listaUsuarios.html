@@ -24,6 +24,18 @@
                     <td>
                         <a class="btn btn-primary btn-sm"
                            th:href="@{/registered/{id}(id=${usuario.id})}">view</a>
+
+                        <form th:if="${!usuario.bloqueado}" method="post"
+                              th:action="@{/registered/{id}/bloquear(id=${usuario.id})}"
+                              style="display:inline-block;">
+                            <button type="submit" class="btn btn-danger btn-sm">disable</button>
+                        </form>
+
+                        <form th:if="${usuario.bloqueado}" method="post"
+                              th:action="@{/registered/{id}/desbloquear(id=${usuario.id})}"
+                              style="display:inline-block;">
+                            <button type="submit" class="btn btn-success btn-sm">enable</button>
+                        </form>
                     </td>
                 </tr>
                 </tbody>

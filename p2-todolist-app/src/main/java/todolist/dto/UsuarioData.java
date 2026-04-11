@@ -12,6 +12,7 @@ public class UsuarioData {
     private String password;
     private Date fechaNacimiento;
     private boolean admin;
+    private boolean bloqueado;
 
     // Getters y setters
     public boolean isAdmin() {
@@ -20,6 +21,13 @@ public class UsuarioData {
 
     public void setAdmin(boolean admin) {
         this.admin = admin;
+    }
+    public boolean isBloqueado() {
+        return bloqueado;
+    }
+
+    public void setBloqueado(boolean bloqueado) {
+        this.bloqueado = bloqueado;
     }
     public Long getId() {
         return id;

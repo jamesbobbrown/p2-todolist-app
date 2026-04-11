@@ -25,8 +25,15 @@ public class Usuario implements Serializable {
     @Temporal(TemporalType.DATE)
     private Date fechaNacimiento;
     private boolean admin;
+    private boolean bloqueado;
 
+    public boolean isBloqueado() {
+        return bloqueado;
+    }
 
+    public void setBloqueado(boolean bloqueado) {
+        this.bloqueado = bloqueado;
+    }
     public boolean isAdmin() {
         return admin;
     }
