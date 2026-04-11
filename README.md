@@ -47,6 +47,14 @@ A service method was added to retrieve the selected user as a `UsuarioData` DTO,
 The page displays the user identifier, name, email and date of birth, but it does not display the password, following the statement requirements.  
 This feature also includes a service test and a controller/web test.
 
+### 5. Administrator User
+An optional administrator user feature was added after the required `1.1.0-SNAPSHOT` features.  
+The registration page now allows creating an administrator account using a checkbox, but only if no administrator already exists.  
+The application checks this rule in the service layer and prevents registering more than one administrator.  
+If an administrator already exists, the checkbox is hidden from the registration page.  
+After logging in, an administrator is redirected to the users list page instead of the tasks page.  
+This feature required changes in the domain model, DTOs, service layer, controller logic, registration template, and automated tests.
+
 ## Optional Features
 
 The project also includes optional improvements on top of the required features.  
