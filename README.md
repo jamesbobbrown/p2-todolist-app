@@ -55,6 +55,12 @@ If an administrator already exists, the checkbox is hidden from the registration
 After logging in, an administrator is redirected to the users list page instead of the tasks page.  
 This feature required changes in the domain model, DTOs, service layer, controller logic, registration template, and automated tests.
 
+### 6. Protection of User Listing and User Description
+An optional protection layer was added to restrict access to the users list page and the user description page.  
+The endpoints `GET /registered` and `GET /registered/{id}` now verify the logged user through `ManagerUserSession` and only allow access if the current user is an administrator.  
+If a non-admin user or an anonymous user tries to access these pages, the application returns HTTP `401 Unauthorized` with a message indicating insufficient permissions.  
+This feature extends the administrator functionality and includes controller/web tests for both authorized and unauthorized access cases.
+
 ## Optional Features
 
 The project also includes optional improvements on top of the required features.  
