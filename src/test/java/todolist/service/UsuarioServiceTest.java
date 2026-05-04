@@ -160,7 +160,7 @@ public class UsuarioServiceTest {
         UsuarioData usuarioBD = usuarioService.findUsuarioDescripcionById(usuarioRegistrado.getId());
 
         assertThat(usuarioBD).isNotNull();
-        assertThat(usuarioBD.getEmail()).isEqualTo("richard@umh.es");
+        assertThat(usuarioBD.getEmail()).isEqualTo("wrong@umh.es");
         assertThat(usuarioBD.getNombre()).isEqualTo("Richard Stallman");
     }
     @Test
