@@ -11,5 +11,4 @@ jobs:
       - uses: actions/checkout@v1
 
       - name: Launch tests with Maven
-        working-directory: ./p2-todolist-app
         run: mvn test
