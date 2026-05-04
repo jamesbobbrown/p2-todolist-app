@@ -6,13 +6,17 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="atsd-todolist-your-full-name" />
+        <module name="todolist-james-brown" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="atsd-todolist-your-full-name" target="1.8" />
+    </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="atsd-todolist-your-full-name" options="-parameters" />
+      <module name="todolist-james-brown" options="-parameters" />
     </option>
   </component>
 </project>
