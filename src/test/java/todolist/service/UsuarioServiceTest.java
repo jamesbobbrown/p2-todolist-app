@@ -146,6 +146,9 @@ public class UsuarioServiceTest {
         Assertions.assertThrows(UsuarioServiceException.class, () -> {
             usuarioService.registrar(admin2);
         });
+    }
+
+    @Test
     public void testFindUsuarioDescripcionById() {
         UsuarioData usuario = new UsuarioData();
         usuario.setEmail("richard@umh.es");
@@ -160,7 +163,6 @@ public class UsuarioServiceTest {
         assertThat(usuarioBD.getEmail()).isEqualTo("richard@umh.es");
         assertThat(usuarioBD.getNombre()).isEqualTo("Richard Stallman");
     }
-
     @Test
     public void servicioRegistroUsuarioExcepcionConEmailRepetido() {
         // GIVEN
