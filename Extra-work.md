@@ -24,6 +24,7 @@ Docker image link:
 https://hub.docker.com/r/jamesbobbrown/p2-todolistapp
 ```
 
+
 Final Docker image tag:
 
 ```text
@@ -433,3 +434,5 @@ The final version includes:
 * Docker image link.
 * Database screenshot.
 * Continuous development using the `develop` branch.
+
+![Extra work database screenshot](docs/extra-work-database.png)
